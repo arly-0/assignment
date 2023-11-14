@@ -22,9 +22,9 @@ public class Operation {
     public static Operation fromString(List<String> operationAsString) {
         return new Operation().builder()
                 .type(OperationType.valueOf(operationAsString.get(0)))
-                .matchUuid(UUID.fromString(operationAsString.get(1)))
+                .matchUuid(operationAsString.get(1))
                 .coinNumber(Integer.parseInt(operationAsString.get(2)))
-                .matchSide(MatchSide.valueOf(operationAsString.get(3)))
+                .matchSide(operationAsString.size() >= 4 ? MatchSide.valueOf(operationAsString.get(3)) : null)
                 .build();
     }
 
@@ -68,8 +68,12 @@ public class Operation {
             return this;
         }
 
-        public Builder matchUuid(UUID matchUuid) {
-            operation.matchUuid = matchUuid;
+        public Builder matchUuid(String matchUuid) {
+            try {
+                operation.matchUuid = UUID.fromString(matchUuid);
+            } catch (Exception e) {
+                operation.matchUuid = null;
+            }
             return this;
         }
 

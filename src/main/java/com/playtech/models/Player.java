@@ -23,7 +23,7 @@ public class Player {
     public static Player fromString(String playerAString) {
         String[] values = playerAString.split(",");
 
-        Operation operation = Operation.fromString(Arrays.asList(values).subList(0, values.length));
+        Operation operation = Operation.fromString(Arrays.asList(values).subList(1, values.length));
 
         return new Player().builder()
                 .uuid(UUID.fromString(values[0]))
