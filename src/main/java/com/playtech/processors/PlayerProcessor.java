@@ -22,9 +22,13 @@ public class PlayerProcessor {
 
                 if (players.containsKey(playerUuid)) {
                     Player existingPlayer = players.get(playerUuid);
-                    players.put(existingPlayer.getUuid(), processPlayerOperation(existingPlayer, player.getOperation()));
+
+                    if (existingPlayer.getOperation().getIsLegal()) {
+                        players.put(playerUuid,
+                                processPlayerOperation(existingPlayer, player.getOperation(), matches));
+                    }
                 } else {
-                    players.put(playerUuid, processPlayerOperation(player, player.getOperation()));
+                    players.put(playerUuid, processPlayerOperation(player, player.getOperation(), matches));
                 }
             } catch (IllegalArgumentException e) {
                 System.err.println("Skipping invalid player data: " + playerAsString);
@@ -35,10 +39,14 @@ public class PlayerProcessor {
         return players;
     }
 
-    public static Player processPlayerOperation(Player player, Operation operation) {
+    public static Player processPlayerOperation(Player player, Operation operation, Map<UUID, Match> matches) {
         switch (operation.getOperationType()) {
             case DEPOSIT:
                 return OperationProcessingStrategy.processDepositOperation(player, operation);
+            case BET:
+                return OperationProcessingStrategy.processBetOperation(player, operation, matches);
+            case WITHDRAW:
+                return OperationProcessingStrategy.processWithdrawOperation(player, operation);
             default:
                 break;
         }
