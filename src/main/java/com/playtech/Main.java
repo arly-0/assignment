@@ -14,7 +14,7 @@ import com.playtech.utils.Utils;
 
 public class Main {
     public static void main(String[] args) {
-
+        Long hostBalance = 0l;
         List<String> playerData = Utils.readData("src/main/resources/player_data.txt");
         List<String> matchData = Utils.readData("src/main/resources/match_data.txt");
 
@@ -24,6 +24,8 @@ public class Main {
                 .collect(Collectors.toMap(Match::getUuid, Function.identity()));
 
         Map<UUID, Player> players = PlayerProcessor.processPlayersOperations(playerData, matches);
-        System.out.println(players);
+        
+        List<String> result = Utils.createResultString(players);
+        Utils.writeResult(result, "src/main/java/com/playtech/result.txt");
     }
 }
