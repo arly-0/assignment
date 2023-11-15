@@ -2,13 +2,13 @@ package com.playtech.models;
 
 import java.util.UUID;
 
-import com.playtech.enums.MatchSide;
+import com.playtech.enums.MatchSides;
 
 public class Match {
     private UUID uuid;
     private double returnRateA;
     private double returnRateB;
-    private MatchSide result;
+    private MatchSides result;
 
     private Match() {
     }
@@ -23,7 +23,7 @@ public class Match {
         UUID uuid = UUID.fromString(matchValues[0]);
         double returnRateA = Double.parseDouble(matchValues[1]);
         double returnRateB = Double.parseDouble(matchValues[2]);
-        MatchSide result = MatchSide.valueOf(matchValues[3]);
+        MatchSides result = MatchSides.valueOf(matchValues[3]);
 
         return new Match().builder()
                 .uuid(uuid)
@@ -53,11 +53,11 @@ public class Match {
         return returnRateB;
     }
 
-    public double getReturnRateByPlayerSide(MatchSide matchSide) {
+    public double getReturnRateByPlayerSide(MatchSides matchSide) {
         double returnRate = 0f;
-        if (matchSide.equals(MatchSide.A)) {
+        if (matchSide.equals(MatchSides.A)) {
             returnRate = returnRateA;
-        } else if (matchSide.equals(MatchSide.B)) {
+        } else if (matchSide.equals(MatchSides.B)) {
             returnRate = returnRateB;
         }
         return returnRate;
@@ -67,15 +67,15 @@ public class Match {
         this.returnRateB = returnRateB;
     }
 
-    public MatchSide getResult() {
+    public MatchSides getResult() {
         return result;
     }
 
-    public void setResult(MatchSide result) {
+    public void setResult(MatchSides result) {
         this.result = result;
     }
 
-    public double getReturnRate(MatchSide side) {
+    public double getReturnRate(MatchSides side) {
         switch (side) {
             case A:
                 return returnRateA;
@@ -104,7 +104,7 @@ public class Match {
             return this;
         }
 
-        public Builder result(MatchSide result) {
+        public Builder result(MatchSides result) {
             match.result = result;
             return this;
         }

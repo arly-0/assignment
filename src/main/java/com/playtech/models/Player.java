@@ -1,14 +1,17 @@
 package com.playtech.models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class Player {
     private UUID uuid;
-    private Operation operation;
+    private List<Operation> operations;
     private Long balance;
     private int wonGames;
     private int totalBets;
+    private List<BetResult> betResults;
 
     private Player() {
     }
@@ -24,7 +27,7 @@ public class Player {
 
         return new Player().builder()
                 .uuid(UUID.fromString(values[0]))
-                .operation(operation)
+                .operations(new ArrayList<>(Arrays.asList(operation)))
                 .balance(0l)
                 .wonGames(0)
                 .totalBets(0)
@@ -39,12 +42,12 @@ public class Player {
         this.uuid = uuid;
     }
 
-    public Operation getOperation() {
-        return operation;
+    public List<Operation> getOperations() {
+        return operations;
     }
 
-    public void setOperation(Operation operation) {
-        this.operation = operation;
+    public void setOperation(List<Operation> operations) {
+        this.operations = operations;
     }
 
     public Long getBalance() {
@@ -83,6 +86,14 @@ public class Player {
         return (totalBets == 0) ? 0.0 : (double) wonGames / totalBets;
     }
 
+     public List<BetResult> getBetResults() {
+        return betResults;
+    }
+
+    public void setBetResults(List<BetResult> betResults) {
+        this.betResults = betResults;
+    }
+
     public static class Builder {
         private Player player = new Player();
 
@@ -91,8 +102,8 @@ public class Player {
             return this;
         }
 
-        public Builder operation(Operation operation) {
-            player.operation = operation;
+        public Builder operations(List<Operation> operations) {
+            player.operations = operations;
             return this;
         }
 

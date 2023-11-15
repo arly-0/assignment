@@ -3,14 +3,14 @@ package com.playtech.models;
 import java.util.List;
 import java.util.UUID;
 
-import com.playtech.enums.MatchSide;
-import com.playtech.enums.OperationType;
+import com.playtech.enums.MatchSides;
+import com.playtech.enums.OperationTypes;
 
 public class Operation {
-    private OperationType type;
+    private OperationTypes type;
     private UUID matchUuid;
     private int coinNumber;
-    private MatchSide matchSide;
+    private MatchSides matchSide;
     private boolean isLegal;
 
     private Operation() {
@@ -22,18 +22,18 @@ public class Operation {
 
     public static Operation fromString(List<String> operationAsString) {
         return new Operation().builder()
-                .type(OperationType.valueOf(operationAsString.get(0)))
+                .type(OperationTypes.valueOf(operationAsString.get(0)))
                 .matchUuid(operationAsString.get(1))
                 .coinNumber(Integer.parseInt(operationAsString.get(2)))
-                .matchSide(operationAsString.size() >= 4 ? MatchSide.valueOf(operationAsString.get(3)) : null)
+                .matchSide(operationAsString.size() >= 4 ? MatchSides.valueOf(operationAsString.get(3)) : null)
                 .build();
     }
 
-    public OperationType getOperationType() {
+    public OperationTypes getOperationType() {
         return type;
     }
 
-    public void setOperationType(OperationType operationType) {
+    public void setOperationType(OperationTypes operationType) {
         this.type = operationType;
     }
 
@@ -53,11 +53,11 @@ public class Operation {
         this.coinNumber = coinNumber;
     }
 
-    public MatchSide getMatchSide() {
+    public MatchSides getMatchSide() {
         return matchSide;
     }
 
-    public void setMatchSide(MatchSide matchSide) {
+    public void setMatchSide(MatchSides matchSide) {
         this.matchSide = matchSide;
     }
 
@@ -72,7 +72,7 @@ public class Operation {
     public static class Builder {
         private Operation operation = new Operation();
 
-        public Builder type(OperationType type) {
+        public Builder type(OperationTypes type) {
             operation.type = type;
             return this;
         }
@@ -91,7 +91,7 @@ public class Operation {
             return this;
         }
 
-        public Builder matchSide(MatchSide matchSide) {
+        public Builder matchSide(MatchSides matchSide) {
             operation.matchSide = matchSide;
             return this;
         }

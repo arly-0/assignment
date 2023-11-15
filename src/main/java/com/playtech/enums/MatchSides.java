@@ -1,13 +1,13 @@
 package com.playtech.enums;
 
-public enum MatchSide {
+public enum MatchSides {
     A("A"),
     B("B"),
     DRAW("DRAW");
 
     private final String matchSide;
 
-    private MatchSide(String matchSide) {
+    private MatchSides(String matchSide) {
         this.matchSide = matchSide;
     }
 
