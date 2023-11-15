@@ -1,7 +1,6 @@
 package com.playtech.processors;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.playtech.models.BetResult;
 import com.playtech.models.Casino;
@@ -11,10 +10,6 @@ import com.playtech.strategies.CasinoProcessingStrategy;
 public class CasinoProcessor {
     public static void process(List<Player> players, Casino casino) {
         players.stream()
-                .filter(player -> player.getOperations().stream()
-                        .noneMatch(operation -> operation.getIsLegal() == false))
-                .collect(Collectors.toList())
-                .stream()
                 .forEach(player -> player.getBetResults().stream()
                         .forEach(betResult -> processCasinoBalance(betResult, casino)));
     }

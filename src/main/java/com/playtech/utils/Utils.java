@@ -4,15 +4,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.playtech.models.Casino;
 import com.playtech.models.Match;
+import com.playtech.models.Operation;
 import com.playtech.models.Player;
 
 public class Utils {
@@ -41,7 +45,7 @@ public class Utils {
     }
 
     public static Map<UUID, Match> readMatches(String filePath) throws IOException {
-       return Files.readAllLines(Path.of(filePath)).stream()
+        return Files.readAllLines(Path.of(filePath)).stream()
                 .map(Match::fromString)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toMap(Match::getUuid, Function.identity()));
@@ -56,31 +60,41 @@ public class Utils {
         }
     }
 
-    // public static List<String> createResultString(Map<UUID, Player> players) {
-    // List<String> results = new ArrayList<>();
+    public static List<String> createResultString(List<Player> legalPlayers, List<Player> illegalPlayers,
+            Casino casino) {
+        List<String> results = new ArrayList<>();
 
-    // // List of legitimate players
-    // players.values().stream()
-    // .filter(player -> player.getOperation().getIsLegal() == true)
-    // .sorted(Comparator.comparing(Player::getUuid))
-    // .forEach(
-    // player -> results.add(player.getUuid().toString() + " " +
-    // player.getBalance().toString() + " " +
-    // String.format(Locale.US, "%.2f", player.calculateWinRate())));
+        legalPlayers.stream()
+                .sorted(Comparator.comparing(Player::getUuid))
+                .forEach(player -> results.add(player.getUuid().toString() + " " +
+                        player.getBalance().toString() + " " +
+                        String.format(Locale.US, "%.2f", player.calculateWinRate())));
 
-    // results.add("");
+        results.add("");
 
-    // // List of illegitimate players
-    // players.values().stream()
-    // .filter(player -> player.getOperation().getIsLegal() == false)
-    // .sorted(Comparator.comparing(Player::getUuid))
-    // .forEach(player -> results.add(player.getUuid().toString() + " " +
-    // player.getOperation().toString()));
+        illegalPlayers.stream()
+                .sorted(Comparator.comparing(Player::getUuid))
+                .forEach(player -> results.add(player.getUuid().toString() + " "
+                        + player.getOperations().stream().filter(operation -> operation.getIsLegal() == false)
+                                .map(Operation::toString).collect(Collectors.joining(" "))));
 
-    // // Casino balance
-    // // results.add("");
-    // // results.add(String.valueOf(casinoBalanceChange));
+        results.add("");
 
-    // return results;
-    // }
+        results.add(String.valueOf(casino.getBalance()));
+
+        return results;
+    }
+
+    public static List<Player> filterOutIllegalPlayers(List<Player> players) {
+        return players.stream()
+                .filter(player -> player.getOperations().stream()
+                        .noneMatch(operation -> operation.getIsLegal() == false))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Player> filterOutLegalPlayers(List<Player> players, List<Player> legalPlayers) {
+        return players.stream()
+                .filter(player -> !legalPlayers.contains(player))
+                .collect(Collectors.toList());
+    }
 }

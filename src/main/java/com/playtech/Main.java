@@ -19,10 +19,14 @@ public class Main {
         Map<UUID, Match> matches = Utils.readMatches("src/main/resources/match_data.txt");
 
         PlayerProcessor.process(players, matches);
-        CasinoProcessor.process(players, casino);
 
-        // List<String> result = Utils.createResultString(players);
-        // Utils.writeResult(result, "src/main/java/com/playtech/result.txt");
+        List<Player> legalPlayers = Utils.filterOutIllegalPlayers(players);
+        List<Player> illegalPlayers = Utils.filterOutLegalPlayers(players, legalPlayers);
+
+        CasinoProcessor.process(legalPlayers, casino);
+
+        List<String> result = Utils.createResultString(legalPlayers, illegalPlayers, casino);
+        Utils.writeResult(result, "src/main/java/com/playtech/result.txt");
 
     }
 }
