@@ -11,6 +11,7 @@ public class Operation {
     private UUID matchUuid;
     private int coinNumber;
     private MatchSide matchSide;
+    private boolean isLegal;
 
     private Operation() {
     }
@@ -60,6 +61,14 @@ public class Operation {
         this.matchSide = matchSide;
     }
 
+    public boolean getIsLegal() {
+        return isLegal;
+    }
+
+    public void setIsLegal(boolean isLegal) {
+        this.isLegal = isLegal;
+    }
+
     public static class Builder {
         private Operation operation = new Operation();
 
@@ -87,8 +96,22 @@ public class Operation {
             return this;
         }
 
+        public Builder isLegal(boolean isLegal) {
+            operation.isLegal = isLegal;
+            return this;
+        }
+
         public Operation build() {
             return operation;
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s %d %s",
+                type,
+                matchUuid != null ? matchUuid : "null",
+                coinNumber,
+                matchSide != null ? matchSide : "null");
     }
 }
