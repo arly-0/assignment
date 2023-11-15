@@ -53,6 +53,16 @@ public class Match {
         return returnRateB;
     }
 
+    public double getReturnRateByPlayerSide(MatchSide matchSide) {
+        double returnRate = 0f;
+        if (matchSide.equals(MatchSide.A)) {
+            returnRate = returnRateA;
+        } else if (matchSide.equals(MatchSide.B)) {
+            returnRate = returnRateB;
+        }
+        return returnRate;
+    }
+
     public void setReturnRateB(double returnRateB) {
         this.returnRateB = returnRateB;
     }
