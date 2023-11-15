@@ -3,15 +3,12 @@ package com.playtech.models;
 import java.util.Arrays;
 import java.util.UUID;
 
-import com.playtech.enums.MatchSide;
-
 public class Player {
     private UUID uuid;
     private Operation operation;
     private Long balance;
     private int wonGames;
     private int totalBets;
-    private MatchSide lastMatchResult;
 
     private Player() {
     }
@@ -31,7 +28,6 @@ public class Player {
                 .balance(0l)
                 .wonGames(0)
                 .totalBets(0)
-                .lastMatchResult(null)
                 .build();
     }
 
@@ -87,14 +83,6 @@ public class Player {
         return (totalBets == 0) ? 0.0 : (double) wonGames / totalBets;
     }
 
-    public MatchSide getLastMatchResult() {
-        return lastMatchResult;
-    }
-
-    public void setLastMatchResult(MatchSide lastMatchResult) {
-        this.lastMatchResult = lastMatchResult;
-    }
-
     public static class Builder {
         private Player player = new Player();
 
@@ -120,11 +108,6 @@ public class Player {
 
         public Builder totalBets(int totalBets) {
             player.totalBets = totalBets;
-            return this;
-        }
-
-        public Builder lastMatchResult(MatchSide lastMatchResult) {
-            player.lastMatchResult = lastMatchResult;
             return this;
         }
 
