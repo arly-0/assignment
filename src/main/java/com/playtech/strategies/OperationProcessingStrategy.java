@@ -35,7 +35,7 @@ public class OperationProcessingStrategy {
                 player.setWonGames(player.getWonGames() + 1);
                 player.setBalance((player.getBalance() + playerProfit));
 
-                BetResult br = BetResult.builder().balanceChange(playerProfit - operation.getCoinNumber())
+                BetResult br = BetResult.builder().balanceChange(playerProfit)
                         .result(BetResults.WIN).build();
                 List<BetResult> brs = player.getBetResults() != null ? player.getBetResults() : new ArrayList<>();
                 brs.add(br);
