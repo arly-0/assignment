@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.playtech.models.Casino;
 import com.playtech.models.Match;
@@ -64,21 +65,25 @@ public class Utils {
             Casino casino) {
         List<String> results = new ArrayList<>();
 
-        legalPlayers.stream()
-                .sorted(Comparator.comparing(Player::getUuid))
-                .forEach(player -> results.add(player.getUuid().toString() + " " +
-                        player.getBalance().toString() + " " +
-                        String.format(Locale.US, "%.2f", player.calculateWinRate())));
+        Stream<String> legalPlayerStream = legalPlayers.isEmpty() ? Stream.of("")
+                : legalPlayers.stream()
+                        .sorted(Comparator.comparing(Player::getUuid))
+                        .map(player -> player.getUuid().toString() + " " +
+                                player.getBalance().toString() + " " +
+                                String.format(Locale.US, "%.2f", player.calculateWinRate()));
 
-        results.add("");
+        results.addAll(Stream.concat(legalPlayerStream, Stream.of(""))
+                .collect(Collectors.toList()));
 
-        illegalPlayers.stream()
-                .sorted(Comparator.comparing(Player::getUuid))
-                .forEach(player -> results.add(player.getUuid().toString() + " "
-                        + player.getOperations().stream().filter(operation -> operation.getIsLegal() == false)
-                                .map(Operation::toString).collect(Collectors.joining(" "))));
+        Stream<String> illegalPlayerStream = illegalPlayers.isEmpty() ? Stream.of("")
+                : illegalPlayers.stream()
+                        .sorted(Comparator.comparing(Player::getUuid))
+                        .map(player -> player.getUuid().toString() + " "
+                                + player.getOperations().stream().filter(operation -> !operation.getIsLegal())
+                                        .map(Operation::toString).collect(Collectors.joining(" ")));
 
-        results.add("");
+        results.addAll(Stream.concat(illegalPlayerStream, Stream.of(""))
+                .collect(Collectors.toList()));
 
         results.add(String.valueOf(casino.getBalance()));
 
